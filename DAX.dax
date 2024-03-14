@@ -1,5 +1,5 @@
 MoM Change = 
-VAR CurrentMonthCount = CALCULATE(DISTINCTCOUNT('Table'[ID]), 'Table'[Date] <= MAX('Table'[Date]))
+VAR CurrentMonthCount = CALCULATE(DISTINCTCOUNT('Table'[ID]), 'Table'[Date] IN ALLSELECTED('Table'[Date]))
 VAR PreviousMonth = EDATE( MAX( 'Table'[Date] ), -1)
 VAR PreviousMonthCount = 
     IF(
