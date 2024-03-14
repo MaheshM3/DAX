@@ -1,0 +1,21 @@
+MoM Change = 
+VAR CurrentMonthCount = CALCULATE(COUNTAX(DISTINCT('Table'[ID])), 'Table'[Date] IN ALLSELECTED('Table'[Date]))
+VAR PreviousMonth = EDATE( MAX( 'Table'[Date] ), -1)
+VAR PreviousMonthCount = 
+    IF(
+        ISBLANK(CALCULATE(COUNTAX(DISTINCT('Table'[ID])), 'Table'[Date] = PreviousMonth)),
+        BLANK(),
+        CALCULATE(COUNTAX(DISTINCT('Table'[ID])), 'Table'[Date] = PreviousMonth)
+    )
+VAR Change = IF(ISBLANK(PreviousMonthCount), BLANK(), CurrentMonthCount - PreviousMonthCount)
+RETURN 
+    IF(ISBLANK(Change), 
+       BLANK(), 
+       IF(Change > 0, 
+          CONCATENATE("↑", FORMAT(Change, "General Number")), 
+          IF(Change < 0, 
+             CONCATENATE("↓", FORMAT(-Change, "General Number")), 
+             "0"
+          )
+       )
+    )
