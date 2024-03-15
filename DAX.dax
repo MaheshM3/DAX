@@ -1,13 +1,12 @@
 MoM Change = 
-VAR CurrentMonthCount = CALCULATE(DISTINCTCOUNT('Table'[ID]), 'Table'[Date] IN ALLSELECTED('Table'[Date]))
-VAR PreviousMonth = EDATE( MAX( 'Table'[Date] ), -1)
+VAR CurrentMonthCount = CALCULATE(DISTINCTCOUNT('Table'[ID]), ALLSELECTED('Table'[Date]))
+VAR PreviousMonth = EDATE( MAX( ALLSELECTED('Table'[Date]) ), -1)
 VAR PreviousMonthCount = 
-    IF(
-        ISBLANK(CALCULATE(DISTINCTCOUNT('Table'[ID]), 'Table'[Date] = PreviousMonth)),
-        BLANK(),
-        CALCULATE(DISTINCTCOUNT('Table'[ID]), 'Table'[Date] = PreviousMonth)
-    )
-VAR Change = IF(ISBLANK(PreviousMonthCount), BLANK(), CurrentMonthCount - PreviousMonthCount)
+    CALCULATE(DISTINCTCOUNT('Table'[ID]), 
+              ALL('Table'[Date]), 
+              'Table'[Date] <= PreviousMonth, 
+              'Table'[Date] > EOMONTH(PreviousMonth, -1))
+VAR Change = CurrentMonthCount - PreviousMonthCount
 RETURN 
     IF(ISBLANK(Change), 
        BLANK(), 
