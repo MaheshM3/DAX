@@ -6,15 +6,12 @@ VAR PreviousMonthCount =
               ALL('Table'[Date]), 
               'Table'[Date] <= PreviousMonth, 
               'Table'[Date] > EOMONTH(PreviousMonth, -1))
-VAR Change = CurrentMonthCount - PreviousMonthCount
+VAR Change = CurrentMonthCount - IF(ISBLANK(PreviousMonthCount), 0, PreviousMonthCount)
 RETURN 
-    IF(ISBLANK(Change), 
-       BLANK(), 
+    IF(Change = 0, 
+       "0", 
        IF(Change > 0, 
           CONCATENATE("↑", FORMAT(Change, "General Number")), 
-          IF(Change < 0, 
-             CONCATENATE("↓", FORMAT(-Change, "General Number")), 
-             "0"
-          )
+          CONCATENATE("↓", FORMAT(-Change, "General Number"))
        )
     )
