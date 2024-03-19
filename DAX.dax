@@ -1,17 +1,23 @@
-MoM Change = 
-VAR SelectedDate = MAX('Table'[Date])
-VAR CurrentMonthStart = EOMONTH(SelectedDate, -1) + 1
-VAR CurrentMonthEnd = EOMONTH(SelectedDate, 0)
-VAR PreviousMonthStart = EOMONTH(SelectedDate, -2) + 1
-VAR PreviousMonthEnd = EOMONTH(SelectedDate, -1)
-VAR CurrentMonthCount = CALCULATE(DISTINCTCOUNT('Table'[ID]), 'Table'[Date] >= CurrentMonthStart, 'Table'[Date] <= CurrentMonthEnd)
-VAR PreviousMonthCount = CALCULATE(DISTINCTCOUNT('Table'[ID]), 'Table'[Date] >= PreviousMonthStart, 'Table'[Date] <= PreviousMonthEnd)
-VAR Change = CurrentMonthCount - IF(ISBLANK(PreviousMonthCount), 0, PreviousMonthCount)
-RETURN 
-    IF(Change = 0, 
-       "0", 
-       IF(Change > 0, 
-          CONCATENATE("↑", FORMAT(Change, "General Number")), 
-          CONCATENATE("↓", FORMAT(-Change, "General Number"))
-       )
+DateTable = 
+ADDCOLUMNS (
+    CALENDAR (DATE(2000, 1, 1), DATE(2025, 12, 31)),
+    "YearMonth", FORMAT([Date], "YYYY-MM")
+)
+
+MoMChange_SelectedDate = 
+VAR SelectedDate = MAX('DateTable'[Date])
+VAR SelectedYearMonth = FORMAT(SelectedDate, "YYYY-MM")
+VAR PreviousMonth = FORMAT(DATEADD(SelectedDate, -1, MONTH), "YYYY-MM")
+RETURN
+IF(
+    ISBLANK(PreviousMonth), 
+    BLANK(), 
+    CALCULATE(
+        [DistinctIDCount], 
+        'YourTable'[YearMonth] = SelectedYearMonth
+    ) - 
+    CALCULATE(
+        [DistinctIDCount], 
+        'YourTable'[YearMonth] = PreviousMonth
     )
+)
