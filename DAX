@@ -20,6 +20,8 @@ RETURN
        )
     )
 
+Date = DISTINCT(financials[Date]) 
+
 TTM = 
 var _curr = max('Date'[Date])
 var _min = min(financials[Date])
