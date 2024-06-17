@@ -19,3 +19,11 @@ RETURN
           )
        )
     )
+
+TTM = 
+var _curr = max('Date'[Date])
+var _min = min(financials[Date])
+var _result =
+CALCULATE(sum(financials[Discounts]),filter(financials, financials[Date]>=_min && financials[Date]<=_curr))
+return
+_result
