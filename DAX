@@ -1,3 +1,5 @@
+############# MoM
+
 MoM Change = 
 VAR CurrentMonthCount = CALCULATE(COUNTAX(DISTINCT('Table'[ID])), 'Table'[Date] IN ALLSELECTED('Table'[Date]))
 VAR PreviousMonth = EDATE( MAX( 'Table'[Date] ), -1)
@@ -19,6 +21,7 @@ RETURN
           )
        )
     )
+############# Disconnected Date table
 
 Date = DISTINCT(financials[Date]) 
 
