@@ -25,6 +25,9 @@ RETURN
 
 Date = DISTINCT(financials[Date]) 
 
+--Stacked bar chart
+color = IF(SELECTEDVALUE(financials[Date]) =SELECTEDVALUE('Date'[Date]), "RED","BLUE")
+
 TTM = 
 var _curr = max('Date'[Date])
 var _min = min(financials[Date])
