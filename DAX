@@ -21,6 +21,9 @@ RETURN
           )
        )
     )
+############# Table row count
+
+Count = "Rows:" & COUNTROWS(ALLSELECTED(financials[Date],financials[Country],financials[Product])) 
 ############# Disconnected Date table
 
 Date = DISTINCT(financials[Date]) 
