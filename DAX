@@ -68,3 +68,35 @@ with open('output_data.json', 'w') as outfile:
     json.dump(data, outfile)
 
 # You can also save it as a CSV file if needed.
+
+################################################################# M Code ##################################################################################################################################
+
+let
+    // Define the API URL
+    url = "https://api.example.com/data",
+    
+    // Load the certificate and key (assuming both are in the .pfx file)
+    certificatePath = "C:/path/to/your-certificate.pfx",
+    certificate = Binary.Load(certificatePath),
+    
+    // Optionally disable SSL verification if necessary
+    // In most cases, SSL verification should be True. If False, it's risky.
+    verifySSL = true, // Or set to false if needed
+    
+    // Headers (optional: based on API requirements)
+    headers = [
+        #"Authorization" = "Bearer YOUR_ACCESS_TOKEN" // or any token-based authentication if required
+    ],
+
+    // Make the web request with the certificate attached
+    apiResponse = Web.Contents(url, [
+        Headers = headers,
+        Certificate = certificate,
+        Timeout = #duration(0, 0, 5, 0),  // Optional: set a 5-minute timeout
+        ManualStatusHandling = {400, 401, 403, 500} // Optional: handle HTTP response codes manually
+    ]),
+    
+    // Parse the API response (assuming it's in JSON format)
+    jsonResponse = Json.Document(apiResponse)
+in
+    jsonResponse
