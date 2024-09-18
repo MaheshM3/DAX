@@ -49,3 +49,22 @@ let
   CET_Timezone     = DateTimeZone.SwitchZone(UTC_DateTimeZone, UTC_Offset)
 in
   CET_Timezone
+
+############# API call ###################################################################################################################################################################################################
+
+import requests
+
+url = "https://api.example.com/data"
+cert = "/path/to/certificate.pem"
+key = "/path/to/privatekey.pem"
+verify = "/path/to/cafile.pem"
+
+response = requests.get(url, cert=(cert, key), verify=verify)
+data = response.json()
+
+# Save the data as a JSON or CSV file
+import json
+with open('output_data.json', 'w') as outfile:
+    json.dump(data, outfile)
+
+# You can also save it as a CSV file if needed.
